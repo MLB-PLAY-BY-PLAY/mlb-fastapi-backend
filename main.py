@@ -13,16 +13,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Helper function to fetch matchup data (limited by API capability)
-def fetch_matchup_data(pitcher_id: int, batter_id: int):
-    url = f"https://statsapi.mlb.com/api/v1/people/{pitcher_id},{batter_id}/stats?stats=vsPlayer"
+# ✅ New: fetch career stats for a single player
+def fetch_player_stats(player_id: int):
+    url = f"https://statsapi.mlb.com/api/v1/people/{player_id}/stats?stats=career"
     response = requests.get(url)
     if response.status_code == 200:
         return response.json()
     return {"error": "Unable to fetch data"}
 
-# Example endpoint for a pitcher vs. batter matchup
-@app.get("/matchup/{pitcher_id}/{batter_id}")
-def get_matchup(pitcher_id: int, batter_id: int):
-    data = fetch_matchup_data(pitcher_id, batter_id)
+@app.get("/player/{player_id}")
+def get_player(player_id: int):
+    data = fetch_player_stats(player_id)
     return data
