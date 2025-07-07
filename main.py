@@ -13,7 +13,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ✅ New: fetch career stats for a single player
+# ✅ Root endpoint — this keeps Render happy!
+@app.get("/")
+def read_root():
+    return {"message": "API is running. Use /player/{player_id}."}
+
+# Fetch player stats
 def fetch_player_stats(player_id: int):
     url = f"https://statsapi.mlb.com/api/v1/people/{player_id}/stats?stats=career"
     response = requests.get(url)
